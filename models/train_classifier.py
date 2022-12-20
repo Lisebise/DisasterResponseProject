@@ -6,6 +6,7 @@ import numpy as np
 import sklearn
 import pickle
 import nltk
+
 nltk.download(["punkt", "wordnet", "omw-1.4"])
 
 from sqlalchemy import create_engine
@@ -25,22 +26,23 @@ def load_data(database_filepath):
     df = pd.read_sql_table('DisasterResponse', engine)
     X = df["message"].values
     # drop the not needed columns for y
-    df.drop(columns=["message", "id", "original", "genre"], inplace = True)
+    df.drop(columns=["message", "id", "original", "genre"], inplace=True)
     Y = df.values
-    
+
     return X, Y, df.columns
+
 
 def tokenize(text):
     text = text.lower()
     text = re.sub(r'[\W_]+', ' ', text)
     tokens = word_tokenize(text)
-    
+
     lemmatizer = WordNetLemmatizer()
     clean_tokens = []
     for tok in tokens:
         clean_tok = lemmatizer.lemmatize(tok).strip()
         clean_tokens.append(clean_tok)
-    
+
     return clean_tokens
 
 
@@ -97,9 +99,9 @@ def main():
         print('Trained model saved!')
 
     else:
-        print('Please provide the filepath of the disaster messages database '\
-              'as the first argument and the filepath of the pickle file to '\
-              'save the model to as the second argument. \n\nExample: python '\
+        print('Please provide the filepath of the disaster messages database ' \
+              'as the first argument and the filepath of the pickle file to ' \
+              'save the model to as the second argument. \n\nExample: python ' \
               'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
 
 
