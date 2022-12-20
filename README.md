@@ -25,6 +25,14 @@ The code should run with no issues using Python versions 3.*.
 
 For this project, I used data from FigureEight that presents messages and categories from disaster responses. I was interested in applying natural lannguage processing and training a supervised machine learning model. Following that, the trained model is able to categorize new messages in the known categories. This helps to understand and filter important messages and therefor extraxt useful information in situation like disasters. The model is represented in a small web interface that allows the user to categorize tehir own message to test the model.
 
+Instrcution to run it in a console
+- To run ETL pipeline that cleans data and stores in database
+    `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+- To run ML pipeline that trains classifier and saves
+    `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+- to run the run.py
+	`cd app`; `python run.py`
+
 ## File Descriptions <a name="files"></a>
 
 The work is separated into data, models and app. 
