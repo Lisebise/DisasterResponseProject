@@ -70,7 +70,7 @@ def evaluate_model(model, X_test, Y_test, category_names):
     print("Accuracy:", accuracy)
     print("Classification Report")
     for i, y_true in enumerate(Y_test[0]):
-        print(classification_report(Y_test[:][i], y_pred[:][i], labels=category_names))
+        print(classification_report(Y_test[:][i], y_pred[:][i]))
 
 
 def save_model(model, model_filepath):
@@ -83,13 +83,13 @@ def main():
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-        
+
         print('Building model...')
         model = build_model()
-        
+
         print('Training model...')
         model.fit(X_train, Y_train)
-        
+
         print('Evaluating model...')
         evaluate_model(model, X_test, Y_test, category_names)
 
