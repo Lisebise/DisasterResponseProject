@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Table
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -39,13 +39,12 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/index')
 def index():
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
-
     categories_names = df.drop(columns=["id", "message", "original", "genre"]).columns
     categories_counts = df.drop(columns=["id", "message", "original", "genre"]).sum()
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-
+    print(categories_names.tolist())
+    print([df[df[k] == 1]["message"].values for k in categories_names][0])
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -66,7 +65,22 @@ def index():
                     'title': "Category"
                 }
             }
+        },
+        {
+            'data': [
+                Table(
+                    header=dict(values=["category", "example"], align='left'),
+                    cells=dict(values=[categories_names.tolist(), [
+                        df[df[k] == 1]["message"].values[0] if len(df[df[k] == 1]["message"].values) > 0 else "" for k
+                        in categories_names]], align="left")
+                )
+            ],
+
+            'layout': {
+                'title': 'Example Messages per Category',
+            }
         }
+
     ]
 
     # encode plotly graphs in JSON
