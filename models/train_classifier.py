@@ -21,6 +21,19 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 def load_data(database_filepath):
+    """Load data into the needed arrays for the mdoel, messages and categories
+
+    :param database_filepath:
+    :type database_filepath: str
+    :return:
+        - X - messages to categorize
+        - Y - categories that are selected
+        - df.columns - column names
+    :type:
+        - X - np.array
+        - Y - np.array
+        - df.columns - pd.Series
+    """
     # load data from database
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql_table('DisasterResponse', engine)
@@ -33,6 +46,13 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """Separate the input text into word tokens and lemmatize them
+
+    :param text: text that will be tokenized
+    :type text: str
+    :return clean_tokens: list with the word tokens
+    :rtype: list
+    """
     text = text.lower()
     text = re.sub(r'[\W_]+', ' ', text)
     tokens = word_tokenize(text)
@@ -47,6 +67,11 @@ def tokenize(text):
 
 
 def build_model():
+    """Build model that can be fitted and later on predict values
+
+    :return cv: grid search model with which the training can be done
+    :rtype cv: GridSearchCV
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -64,6 +89,13 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """Evaluate the model based on the accuracy and the classification report
+
+    :param model: sklearn model that can predict
+    :param X_test: messgaes that will be categorized
+    :param Y_test: categories of the X_test
+    :param category_names: list containing all categories
+    """
     # predict on test data
     y_pred = model.predict(X_test)
     accuracy = (y_pred == Y_test).mean()
@@ -74,6 +106,11 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """Save the model as pickle file
+
+    :param model: Trained model that will be saved
+    :param model_filepath: string where the model will be saved
+    """
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
