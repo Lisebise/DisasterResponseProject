@@ -18,6 +18,9 @@ Next to the Anaconda distribution of Python you need the following packages/libr
 - sys
 - re
 - pickle
+- flask
+- plotly
+- json
 
 The code should run with no issues using Python versions 3.*.
 
